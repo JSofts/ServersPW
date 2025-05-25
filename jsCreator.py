@@ -11,12 +11,24 @@ def files_are_equal_by_hash(file1, file2):
         while chunk := f2.read(8192): hash2.update(chunk)
     return hash1.digest() == hash2.digest()
 
+def copy_if_different(src, dst):
+    """
+    Копирует файл src в dst, если dst не существует или отличается по содержимому.
+    Если файлы равны — ничего не делает.
+    """
+    if os.path.exists(dst):
+        if files_are_equal_by_hash(src, dst):
+            # Файлы идентичны, пропускаем копирование
+            return False
+    shutil.copy2(src, dst)
+    return True
+
 CurentDir = os.getcwd()
 EditorDir = CurentDir + "/Edit"
 WorkDir = CurentDir + "/Client"
 SaveDir = CurentDir + "/Update/new"
 
-mask = ['elements.data', 'tasks.data', 'gshop?.data']
+mask = ['elements.data', 'tasks.data', 'gshop*.data']
 
 # Рекурсивно обходим все файлы в EditorDir по маскам
 for pattern in mask:
@@ -33,5 +45,6 @@ for pattern in mask:
         save_file = os.path.join(SaveDir, filename)
         # Копируем, если файл не найден или отличается по хешу
         if not found or not files_are_equal_by_hash(editor_file, work_file):
-            shutil.copy2(editor_file, save_file)
-            print(f"Copied {filename} to {SaveDir}")
+           if copy_if_different(editor_file, save_file):
+                print(f"Copied {editor_file} to {save_file}")
+            
