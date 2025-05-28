@@ -30,25 +30,29 @@ SaveDir = CurentDir + "/Update/new"
 
 mask = ['elements.data', 'tasks.data', 'gshop*.data']
 
-# Рекурсивно обходим все файлы в EditorDir по маскам
-for pattern in mask:
-    editor_files = glob(os.path.join(EditorDir, '**', pattern), recursive=True)
-    for editor_file in editor_files:
-        filename = os.path.basename(editor_file)
-        # Ищем файл с таким же именем в WorkDir (в любом подкаталоге)
-        found = False
-        for root, _, files in os.walk(WorkDir):
-            if filename in files:
-                work_file = os.path.join(root, filename)
-                found = True
-                break
-        save_file = os.path.join(SaveDir, filename)
-        # Копируем, если файл не найден
-        if not found :
-            if copy_if_different(editor_file, work_file):
-                print(f"Copied {editor_file} to {work_file}")
-        # Копируем, если файл отличается по хешу
-        if not files_are_equal_by_hash(editor_file, work_file):           
-           if copy_if_different(editor_file, save_file):
-                print(f"Copied {editor_file} to {save_file}")
+def btn_cliked():   """
+    Функция для обработки нажатия кнопки.
+    Выполняет копирование файлов из Edit в Client и Update/new.
+    """
+    # Рекурсивно обходим все файлы в EditorDir по маскам
+    for pattern in mask:
+        editor_files = glob(os.path.join(EditorDir, '**', pattern), recursive=True)
+        for editor_file in editor_files:
+            filename = os.path.basename(editor_file)
+            # Ищем файл с таким же именем в WorkDir (в любом подкаталоге)
+            found = False
+            for root, _, files in os.walk(WorkDir):
+                if filename in files:
+                    work_file = os.path.join(root, filename)
+                    found = True
+                    break
+            save_file = os.path.join(SaveDir, filename)
+            # Копируем, если файл не найден
+            if not found :
+                if copy_if_different(editor_file, work_file):
+                    print(f"Copied {editor_file} to {work_file}")
+            # Копируем, если файл отличается по хешу
+            if not files_are_equal_by_hash(editor_file, work_file):           
+                if copy_if_different(editor_file, save_file):
+                    print(f"Copied {editor_file} to {save_file}")
             
