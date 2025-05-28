@@ -43,8 +43,12 @@ for pattern in mask:
                 found = True
                 break
         save_file = os.path.join(SaveDir, filename)
-        # Копируем, если файл не найден или отличается по хешу
-        if not found or not files_are_equal_by_hash(editor_file, work_file):
+        # Копируем, если файл не найден
+        if not found :
+            if copy_if_different(editor_file, work_file):
+                print(f"Copied {editor_file} to {work_file}")
+        # Копируем, если файл отличается по хешу
+        if not files_are_equal_by_hash(editor_file, work_file):           
            if copy_if_different(editor_file, save_file):
                 print(f"Copied {editor_file} to {save_file}")
             
