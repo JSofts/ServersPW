@@ -51,4 +51,5 @@ for pattern in mask:
         if not files_are_equal_by_hash(editor_file, work_file):           
            if copy_if_different(editor_file, save_file):
                 print(f"Copied {editor_file} to {save_file}")
-            
+ 
+input('Нажмите Enter для выхода…')
