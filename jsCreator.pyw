@@ -46,6 +46,10 @@ class application:
                 else:
                     self.list.insert(tkinter.END, f"Файлы {editor_file}")
                     self.list.insert(tkinter.END, f"и {save_file} равны.")
+                
+            self.master.update_idletasks()
+
+        self.list.insert(tkinter.END, "Сканирование завершено.")   
 
 def files_are_equal_by_hash(file1, file2):
     # Сравнивает два файла по их hash (SHA256). Возвращает True, если файлы идентичны.
